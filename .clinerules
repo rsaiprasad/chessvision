@@ -1,0 +1,129 @@
+# Chess Video Analysis Application - Project Intelligence
+
+## Project Patterns
+
+### Naming Conventions
+
+1. **Python Code**
+   - Use snake_case for variables, functions, and file names
+   - Use PascalCase for class names
+   - Use UPPER_CASE for constants
+   - Prefix private methods/variables with underscore (_)
+
+2. **TypeScript/React Code**
+   - Use camelCase for variables, functions, and file names
+   - Use PascalCase for component names, interfaces, and types
+   - Use kebab-case for CSS class names
+   - Use PascalCase.tsx for React component files
+
+3. **File Organization**
+   - Backend: Organize by feature/module
+   - Frontend: Organize by component type, then feature
+
+### Code Style Preferences
+
+1. **Python**
+   - Follow PEP 8 guidelines
+   - Maximum line length: 88 characters (Black formatter default)
+   - Use type hints for function parameters and return values
+   - Prefer explicit over implicit
+   - Use docstrings for all public functions and classes
+
+2. **TypeScript/React**
+   - Use functional components with hooks
+   - Use TypeScript interfaces for props and state
+   - Prefer explicit return types
+   - Use destructuring for props
+   - Organize imports: React, external libraries, internal modules
+
+### Development Workflow
+
+1. **Version Control**
+   - Feature branches for new functionality
+   - Descriptive commit messages with component/area prefix
+   - Pull requests for code review before merging
+
+2. **Testing**
+   - Write tests alongside code, not after
+   - Test edge cases thoroughly
+   - Mock external dependencies
+   - Focus on unit tests for core algorithms
+
+## Critical Implementation Paths
+
+### Backend Processing Pipeline
+
+```
+Video Input → Frame Extraction → Board Detection → Position Extraction → Move Tracking → PGN/FEN Generation
+```
+
+- Board detection is the most critical and challenging component
+- Position extraction accuracy directly impacts move tracking
+- Chess logic validation is essential for reliable move detection
+
+### Frontend Data Flow
+
+```
+API Client → State Management → UI Components → User Interaction → API Client
+```
+
+- Real-time updates require efficient state management
+- Video and board components must stay synchronized
+- Error handling should be graceful and informative
+
+## Known Challenges
+
+1. **Computer Vision Challenges**
+   - Varying lighting conditions affect board/piece detection
+   - Different chess piece styles require robust recognition
+   - Camera angle and perspective distortion
+   - Partial occlusion of pieces or board
+
+2. **Performance Considerations**
+   - Real-time processing requires optimization
+   - Balance between accuracy and speed
+   - Memory usage for video processing
+   - Frontend rendering performance
+
+3. **Integration Points**
+   - Backend to frontend communication
+   - Video stream handling
+   - Lichess board integration
+   - Error propagation across system boundaries
+
+## Project Evolution Notes
+
+- Initial focus on accuracy over speed
+- Start with controlled environments, then expand to more challenging scenarios
+- Modular design to allow component replacement/improvement
+- Consider machine learning approaches if traditional CV proves insufficient
+
+## Tool Usage Patterns
+
+### Backend Development
+
+- Use Poetry for dependency management
+- Leverage OpenCV for computer vision tasks
+- Utilize python-chess for chess logic
+- Implement CLI with argparse
+- Use pytest for testing
+
+### Frontend Development
+
+- Use RSPack for bundling (specified requirement)
+- Leverage ShadCN UI components
+- Implement TypeScript for type safety
+- Use React hooks for state management
+- Integrate with Lichess board API
+
+## User Preferences
+
+- Command-line tool should be simple and intuitive
+- Visual feedback is important for debugging
+- Performance is critical for real-time analysis
+- Error messages should be clear and actionable
+- Configuration options should be available but not overwhelming
+
+## Evolution Tracking
+
+This file will be updated as we learn more about the project, discover new patterns, and establish best practices. Key learnings from implementation will be documented here to guide future development.
