@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart TD
-    subgraph Backend [Python Backend]
+    subgraph chess-vision-lib [Chess Vision Library]
         VideoInput[Video Input Handler] --> FrameExtractor[Frame Extractor]
         FrameExtractor --> BoardDetector[Chess Board Detector]
         BoardDetector --> PositionExtractor[Position Extractor]
@@ -15,27 +15,29 @@ flowchart TD
         ChessLogic -.-> PositionExtractor
     end
     
-    subgraph WebService [Python Web Service]
+    subgraph chess-vision-service [Chess Vision Service]
         API[REST API] --> VideoProcessor[Video Processor]
-        VideoProcessor --> Backend
-        Backend --> ResponseFormatter[Response Formatter]
+        VideoProcessor --> LibraryInterface[Library Interface]
+        LibraryInterface --> chess-vision-lib
+        chess-vision-lib --> ResponseFormatter[Response Formatter]
         ResponseFormatter --> API
     end
     
-    subgraph Frontend [React Frontend]
-        VideoDisplay[Video Display] --> WebService
-        WebService --> BoardDisplay[Chess Board Display]
-        UserControls[User Controls] --> WebService
+    subgraph chess-vision-web [Chess Vision Web]
+        VideoDisplay[Video Display] --> APIClient[API Client]
+        APIClient --> chess-vision-service
+        chess-vision-service --> BoardDisplay[Chess Board Display]
+        UserControls[User Controls] --> APIClient
     end
     
-    VideoFile[Video File] --> Backend
-    VideoStream[Video Stream] --> WebService
-    User[User] --> Frontend
+    VideoFile[Video File] --> chess-vision-lib
+    VideoStream[Video Stream] --> chess-vision-service
+    User[User] --> chess-vision-web
 ```
 
 ## Component Relationships
 
-### Backend Components
+### Chess Vision Library Components
 
 1. **Video Input Handler**
    - Accepts video files or streams
@@ -72,7 +74,7 @@ flowchart TD
    - Validates legal moves
    - Improves move detection accuracy
 
-### Web Service Components
+### Chess Vision Service Components
 
 1. **REST API**
    - Handles HTTP requests and responses
@@ -82,14 +84,19 @@ flowchart TD
 2. **Video Processor**
    - Handles streaming video input
    - Manages processing state
-   - Coordinates with backend components
+   - Coordinates with library components
 
-3. **Response Formatter**
+3. **Library Interface**
+   - Provides clean integration with chess-vision-lib
+   - Handles data conversion between service and library
+   - Manages library configuration
+
+4. **Response Formatter**
    - Structures API responses
    - Formats chess data for frontend consumption
    - Handles error responses
 
-### Frontend Components
+### Chess Vision Web Components
 
 1. **Video Display**
    - Shows original video feed
@@ -106,32 +113,37 @@ flowchart TD
    - Processing options and settings
    - Analysis tools and preferences
 
+4. **API Client**
+   - Handles communication with backend service
+   - Manages authentication
+   - Processes API responses
+
 ## Data Flow Patterns
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant Frontend
-    participant API
-    participant Backend
+    participant Frontend as chess-vision-web
+    participant API as chess-vision-service API
+    participant Library as chess-vision-lib
     participant ChessLogic
     
     User->>Frontend: Upload video/Start stream
     Frontend->>API: Send video data
-    API->>Backend: Process video
+    API->>Library: Process video
     
     loop For each frame
-        Backend->>Backend: Extract frame
-        Backend->>Backend: Detect board
-        Backend->>Backend: Extract position
-        Backend->>ChessLogic: Validate position
-        ChessLogic-->>Backend: Position validation
+        Library->>Library: Extract frame
+        Library->>Library: Detect board
+        Library->>Library: Extract position
+        Library->>ChessLogic: Validate position
+        ChessLogic-->>Library: Position validation
         
         alt Position changed
-            Backend->>ChessLogic: Determine move
-            ChessLogic-->>Backend: Legal move options
-            Backend->>Backend: Generate PGN/FEN
-            Backend-->>API: Position update
+            Library->>ChessLogic: Determine move
+            ChessLogic-->>Library: Legal move options
+            Library->>Library: Generate PGN/FEN
+            Library-->>API: Position update
             API-->>Frontend: Position data
             Frontend-->>User: Update display
         end
@@ -140,25 +152,29 @@ sequenceDiagram
 
 ## Key Technical Decisions
 
-1. **Separate Frontend and Backend Packages**
-   - Enables independent development and deployment
-   - Allows for different technology stacks
-   - Facilitates clear API boundaries
+1. **Three-Tier Architecture**
+   - Separation of core library, service layer, and frontend
+   - Clear boundaries between components
+   - Independent development and deployment
+   - Reusable core library across different applications
 
-2. **Python for Backend Processing**
+2. **Python for Core Library and Service**
    - Strong libraries for computer vision (OpenCV)
    - Excellent machine learning support
    - Rich ecosystem for chess programming
+   - FastAPI for efficient web service
 
 3. **React/TypeScript for Frontend**
    - Type safety for complex chess data structures
    - Component-based UI for chess visualization
    - Strong ecosystem for interactive applications
+   - ShadCN UI for consistent design
 
 4. **REST API for Communication**
    - Stateless communication between frontend and backend
    - Standard HTTP methods for resource operations
    - JSON for data exchange
+   - Clear API contract
 
 5. **Lichess Board Integration**
    - Leverage existing, well-tested chess visualization
@@ -196,3 +212,8 @@ sequenceDiagram
    - Abstract data storage and retrieval
    - Separate business logic from data access
    - Enable different storage backends (file, database)
+
+6. **Adapter Pattern**
+   - Interface between chess-vision-lib and chess-vision-service
+   - Convert between library data structures and API formats
+   - Isolate changes in either component

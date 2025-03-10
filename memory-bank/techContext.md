@@ -2,15 +2,13 @@
 
 ## Technology Stack
 
-### Backend (Python)
+### Chess Vision Library (Python)
 
 #### Core Technologies
-- **Python 3.9+**: Main programming language for backend development
+- **Python 3.9+**: Main programming language for library development
 - **OpenCV**: Computer vision library for video processing and image analysis
 - **python-chess**: Chess representation and move validation
 - **NumPy**: Numerical computing for image processing
-- **FastAPI**: Web framework for API development (Phase 2)
-- **Uvicorn/Gunicorn**: ASGI server for FastAPI deployment (Phase 2)
 
 #### Development Tools
 - **Poetry**: Dependency management and packaging
@@ -20,7 +18,24 @@
 - **Flake8**: Linting
 - **Docker**: Containerization for deployment
 
-### Frontend (TypeScript/React)
+### Chess Vision Service (Python)
+
+#### Core Technologies
+- **FastAPI**: Web framework for API development
+- **Uvicorn/Gunicorn**: ASGI server for FastAPI deployment
+- **Pydantic**: Data validation and settings management
+- **SQLAlchemy** (optional): Database ORM if persistence is needed
+- **chess-vision-lib**: Core library for chess video analysis
+
+#### Development Tools
+- **Poetry**: Dependency management and packaging
+- **Pytest**: Testing framework
+- **Mypy**: Static type checking
+- **Black**: Code formatting
+- **Flake8**: Linting
+- **Docker**: Containerization for deployment
+
+### Chess Vision Web (TypeScript/React)
 
 #### Core Technologies
 - **TypeScript 4.9+**: Type-safe JavaScript
@@ -38,30 +53,46 @@
 
 ## Development Environment Setup
 
-### Backend Setup
+### Chess Vision Library Setup
 ```bash
 # Create project directory
-mkdir -p chess-video-analyzer/backend
-cd chess-video-analyzer/backend
+mkdir -p chess-vision-lib
+cd chess-vision-lib
 
 # Set up Python environment with Poetry
 poetry init
 poetry add opencv-python python-chess numpy
 poetry add --dev pytest mypy black flake8
 
-# For Phase 2
-poetry add fastapi uvicorn
-
 # Create project structure
-mkdir -p chess_video_analyzer/{__init__.py,video,board,position,moves,notation,cli}
-touch chess_video_analyzer/__init__.py
+mkdir -p src/chess_vision/{board,position,moves,notation,video,utils}
+touch src/chess_vision/__init__.py
 ```
 
-### Frontend Setup
+### Chess Vision Service Setup
 ```bash
 # Create project directory
-mkdir -p chess-video-analyzer/frontend
-cd chess-video-analyzer/frontend
+mkdir -p chess-vision-service
+cd chess-vision-service
+
+# Set up Python environment with Poetry
+poetry init
+poetry add fastapi uvicorn pydantic
+poetry add --dev pytest mypy black flake8
+
+# Add local library as dependency (development)
+poetry add -e ../chess-vision-lib
+
+# Create project structure
+mkdir -p src/chess_vision_service/{api,models,services,utils}
+touch src/chess_vision_service/__init__.py
+```
+
+### Chess Vision Web Setup
+```bash
+# Create project directory
+mkdir -p chess-vision-web
+cd chess-vision-web
 
 # Initialize package
 npm init -y
@@ -107,7 +138,7 @@ mkdir -p src/{components,hooks,services,utils,pages}
 
 ## Dependencies
 
-### Backend Dependencies
+### Chess Vision Library Dependencies
 
 #### Core Libraries
 - **OpenCV (cv2)**: Computer vision operations
@@ -127,7 +158,9 @@ mkdir -p src/{components,hooks,services,utils,pages}
   - Mathematical operations
   - Performance optimization
 
-#### Phase 2 Additional Libraries
+### Chess Vision Service Dependencies
+
+#### Core Libraries
 - **FastAPI**: API framework
   - Endpoint definitions
   - Request/response handling
@@ -139,7 +172,13 @@ mkdir -p src/{components,hooks,services,utils,pages}
   - Schema definition
   - Configuration management
 
-### Frontend Dependencies
+- **chess-vision-lib**: Core functionality
+  - Video processing
+  - Board detection
+  - Position extraction
+  - Move tracking
+
+### Chess Vision Web Dependencies
 
 #### UI Components
 - **React**: UI rendering
@@ -176,21 +215,21 @@ flowchart TD
     Development --> Deployment
 ```
 
-1. **Backend Development**
+1. **Chess Vision Library Development**
    - Implement core video processing pipeline
    - Develop chess position extraction
    - Create move tracking logic
    - Build command-line interface
    - Test with sample videos
 
-2. **Web Service Development**
+2. **Chess Vision Service Development**
    - Design API endpoints
    - Implement request/response handling
    - Add streaming support
    - Secure and optimize API
    - Test with API clients
 
-3. **Frontend Development**
+3. **Chess Vision Web Development**
    - Create React application structure
    - Implement UI components
    - Integrate with Lichess board

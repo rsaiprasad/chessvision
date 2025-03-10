@@ -6,6 +6,29 @@ Chess players, coaches, and enthusiasts often record games for later analysis, b
 ## Solution
 This application automates the process of extracting chess positions and moves from video recordings. By leveraging computer vision and chess logic, it eliminates the need for manual transcription, allowing players to focus on analysis rather than data entry.
 
+## Project Components
+
+### Chess Vision Library (chess-vision-lib)
+- Core functionality for chess video analysis
+- Processes video files to extract chess positions and moves
+- Generates PGN/FEN notation
+- Provides visualization tools for debugging
+- Can be used as a standalone library or integrated into other applications
+
+### Chess Vision Service (chess-vision-service)
+- Web service exposing library functionality via REST API
+- Handles video stream processing
+- Provides endpoints for position/move data
+- Enables integration with web and mobile applications
+- Manages authentication and authorization
+
+### Chess Vision Web (chess-vision-web)
+- Web interface for interacting with the service
+- Provides video upload and streaming capabilities
+- Displays chess positions alongside video
+- Integrates with Lichess board for analysis
+- Offers user controls for customization
+
 ## Target Users
 - Chess players of all levels who record their games
 - Chess coaches analyzing student games
@@ -15,21 +38,21 @@ This application automates the process of extracting chess positions and moves f
 
 ## User Experience Goals
 
-### Phase 1: Command-Line Utility
-- **Simplicity**: Easy-to-use command-line interface
+### Chess Vision Library
+- **Simplicity**: Easy-to-use API for developers
 - **Accuracy**: Reliable chess position extraction and move detection
-- **Visibility**: Visual feedback showing detected positions
+- **Flexibility**: Support for various video formats and chess board styles
 - **Efficiency**: Real-time processing with minimal delay
-- **Flexibility**: Support for various video formats and resolutions
+- **Extensibility**: Modular design for easy customization
 
-### Phase 2: Web Service
+### Chess Vision Service
 - **Accessibility**: Remote access to processing capabilities
 - **Scalability**: Handle multiple video streams
 - **Integration**: Easy to incorporate into other applications
 - **Configurability**: Adjustable parameters via API
 - **Reliability**: Stable service with error handling
 
-### Phase 3: Web Interface
+### Chess Vision Web
 - **Intuitiveness**: Clear, user-friendly interface
 - **Visualization**: Side-by-side video and chess board display
 - **Interactivity**: Navigate through detected positions

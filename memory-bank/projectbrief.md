@@ -11,9 +11,33 @@ This application analyzes chess games from video recordings, identifies the ches
 5. Output standard chess notation (PGN/FEN) for the game
 6. Consider legal chess moves to improve move detection accuracy
 
+## Project Structure
+The project is organized into three main components:
+
+1. **chess-vision-lib**: Core library for chess video analysis
+   - Video processing and frame extraction
+   - Board detection and normalization
+   - Position extraction and validation
+   - Move tracking and chess logic
+   - PGN/FEN generation
+
+2. **chess-vision-service**: Backend REST API service
+   - Exposes library functionality through web API
+   - Handles video stream processing
+   - Provides endpoints for position/move data
+   - Manages authentication and authorization
+   - Formats responses for frontend consumption
+
+3. **chess-vision-web**: Frontend web application
+   - React/TypeScript with ShadCN UI
+   - Dual-panel interface (video + chess board)
+   - Integration with Lichess analysis board
+   - Connection to backend service via API
+   - User controls and settings
+
 ## Development Phases
 
-### Phase 1: Python Library Development
+### Phase 1: Core Library Development (chess-vision-lib)
 - Create core video processing functionality
 - Implement chess position extraction algorithms
 - Develop move detection and tracking
@@ -21,14 +45,14 @@ This application analyzes chess games from video recordings, identifies the ches
 - Display identified chess positions visually
 - Output PGN/FEN as moves are detected
 
-### Phase 2: Web Service Implementation
-- Convert Python library to web service
+### Phase 2: Backend Service Implementation (chess-vision-service)
+- Create REST API service using FastAPI
 - Accept video stream inputs
 - Process video streams in real-time
 - Provide API endpoints for position/move data
 - Output FEN/PGN based on specified arguments
 
-### Phase 3: Frontend Development
+### Phase 3: Frontend Development (chess-vision-web)
 - Build React/TypeScript frontend with ShadCN UI
 - Create dual-panel interface (video + chess board)
 - Integrate with Lichess analysis board for position display
@@ -36,8 +60,9 @@ This application analyzes chess games from video recordings, identifies the ches
 - Display real-time position updates
 
 ## Technical Architecture
-- Backend: Python (separate package)
-- Frontend: React/TypeScript with ShadCN UI (separate package)
+- Core Library: Python (chess-vision-lib)
+- Backend Service: Python with FastAPI (chess-vision-service)
+- Frontend: React/TypeScript with ShadCN UI (chess-vision-web)
 - Frontend Build Tool: RSPack
 - Integration: Web API connecting frontend and backend
 
